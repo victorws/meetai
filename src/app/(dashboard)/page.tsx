@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import { HomeView } from "@/modules/home/ui/views/home-views"
+import { HomeView } from "@/modules/home/ui/views/home-view"
 import { redirect } from "next/navigation";
 
 // http://localhost:3000
