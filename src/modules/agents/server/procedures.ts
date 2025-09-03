@@ -30,7 +30,7 @@ export const agentsRouter = createTRPCRouter({
                 });
             }
 
-            return updatedAgent
+            return updatedAgent;
         }),
     remove: protectedProcedure
         .input(z.object({ id: z.string() }))
