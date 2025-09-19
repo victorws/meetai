@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { VideoIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { UseConfirm } from "@/hooks/use-confirm";
+import { useConfirm } from "@/hooks/use-confirm";
 import { useState } from "react";
 import { UpdateAgentDialog } from "../components/update-agent-dialog";
 
@@ -41,7 +41,7 @@ export const AgentIdView = ({ agentId }: Props) => {
         }),
     );
 
-    const [RemoveConfirmation, confirmRemove] = UseConfirm(
+    const [RemoveConfirmation, confirmRemove] = useConfirm(
         "Are you sure",
         `The following action will remove ${data.meetingCount} associated meetings`,
     );
