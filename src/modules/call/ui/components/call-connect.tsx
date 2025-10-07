@@ -14,7 +14,6 @@ import {
 import { useTRPC } from "@/trpc/client";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
-import Stream from "stream";
 import { CallUI } from "./call-ui";
 
 interface Props {
