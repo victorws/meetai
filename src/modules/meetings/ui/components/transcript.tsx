@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { generatedAvatarUri } from "@/lib/avatar";
-import { StringValidation } from "zod";
 
 interface Props {
     meetingId: string;
