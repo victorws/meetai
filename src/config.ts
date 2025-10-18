@@ -1,20 +1,26 @@
 import dotenv from "dotenv";
 
-// 🧭 Load environment file dynamically
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config({ path: ".env.local" });
-  console.log("Using .env.local (development)");
-} else {
+// Automatically load the right env file
+if (process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production") {
   dotenv.config({ path: ".env" });
-  console.log("Using .env (production)");
+  console.log("🟢 Loaded .env (production)");
+} else {
+  dotenv.config({ path: ".env.local" });
+  console.log("🧩 Loaded .env.local (development)");
 }
 
 export const config = {
-  env: process.env.NODE_ENV ?? "development",
+  env:
+    process.env.VERCEL_ENV ||
+    process.env.NODE_ENV ||
+    "development",
 
   database: {
     url: process.env.DATABASE_URL!,
-    name: process.env.NODE_ENV === "production" ? "production" : "development",
+    name:
+      process.env.VERCEL_ENV === "production"
+        ? "production"
+        : "development",
   },
 
   betterAuth: {
@@ -52,7 +58,7 @@ export const config = {
   },
 };
 
-// Validate critical env variables
+// ✅ Required variables check
 const requiredVars = [
   ["DATABASE_URL", config.database.url],
   ["BETTER_AUTH_SECRET", config.betterAuth.secret],
@@ -61,11 +67,10 @@ const requiredVars = [
 
 for (const [key, value] of requiredVars) {
   if (!value) {
-    throw new Error(`Missing required environment variable: ${key}`);
+    throw new Error(`❌ Missing required environment variable: ${key}`);
   }
 }
 
-// Optional: helpful log for debugging
 console.log(
-  `Loaded config for ${config.env} environment (DB: ${config.database.name})`
+  `✅ Loaded config for ${config.env} environment (DB: ${config.database.name})`
 );
