@@ -17,16 +17,27 @@ import { streamVideo } from "@/lib/stream-video";
 import { inngest } from "@/inngest/client";
 import { generatedAvatarUri } from "@/lib/avatar";
 import { streamChat } from "@/lib/stream-chat";
+import { serverConfig } from "@/config";
 
-const openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+const openaiClient = new OpenAI({ apiKey: serverConfig.openai.apiKey });
 
 function verifySignatureWithSDK(body: string, signature: string): boolean {
     return streamVideo.verifyWebhook(body, signature);
 }
 
+export async function GET() {
+  return NextResponse.json({ message: "Webhook endpoint is alive!" });
+}
+
 export async function POST(req: NextRequest) {
     const signature = req.headers.get("x-signature");
     const apiKey = req.headers.get("x-api-key");
+
+    if (process.env.NODE_ENV !== "production") {
+        console.log("🔔 Webhook POST received at:", new Date().toISOString());
+        console.log("Signature:", signature ? "✅ present" : "❌ missing");
+        console.log("API key:", apiKey ? "✅ present" : "❌ missing");
+    }
 
     if (!signature || !apiKey) {
         return NextResponse.json(
@@ -95,7 +106,7 @@ export async function POST(req: NextRequest) {
         const call = streamVideo.video.call("default", meetingId);
         const realtimeClient = await streamVideo.video.connectOpenAi({
             call,
-            openAiApiKey: process.env.OPENAI_API_KEY!,
+            openAiApiKey: serverConfig.openai.apiKey,
             agentUserId: existingAgent.id,
         });
 

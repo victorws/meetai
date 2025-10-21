@@ -1,3 +1,5 @@
+import "server-only";
+
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { polar, checkout, portal } from "@polar-sh/better-auth";
@@ -6,6 +8,7 @@ import { db } from "@/db"; // your drizzle instance
 import * as schema from "@/db/schema";
 
 import { polarClient }  from "./polar";
+import { serverConfig } from "@/config";
  
 export const auth = betterAuth({
     plugins: [
@@ -23,12 +26,12 @@ export const auth = betterAuth({
     ],
     socialProviders: {
         github: { 
-            clientId: process.env.GITHUB_CLIENT_ID as string, 
-            clientSecret: process.env.GITHUB_CLIENT_SECRET as string, 
+            clientId: serverConfig.github.clientId as string, 
+            clientSecret: serverConfig.github.clientSecret as string, 
         },
         google: { 
-            clientId: process.env.GOOGLE_CLIENT_ID as string, 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
+            clientId: serverConfig.google.clientId as string, 
+            clientSecret: serverConfig.google.clientSecret as string, 
         },
     },
     emailAndPassword: {  

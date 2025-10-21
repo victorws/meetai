@@ -7,6 +7,7 @@ import { agents, meetings, user } from "@/db/schema";
 import { inngest } from "@/inngest/client";
 
 import { StreamTranscriptItem } from "@/modules/meetings/types";
+import { serverConfig } from "@/config";
 
 const summarizer = createAgent({
   name: "summarizer",
@@ -31,7 +32,7 @@ const summarizer = createAgent({
     - Feature X automatically does Y
     - Mention of integration with Z
   `.trim(),
-  model: openai({ model: "gpt-4o", apiKey: process.env.OPENAI_API_KEY }),
+  model: openai({ model: "gpt-4o", apiKey: serverConfig.openai.apiKey }),
 });
 
 export const meetingsProcessing = inngest.createFunction(

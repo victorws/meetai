@@ -1,15 +1,19 @@
-import dotenv from "dotenv";
+import "server-only";
 
-// Automatically load the right env file
+import dotenv from "dotenv";
+import type { ServerConfig } from "./types";
+
+// Load correct env file
 if (process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production") {
   dotenv.config({ path: ".env" });
-  console.log("🟢 Loaded .env (production)");
+  console.log("Loaded .env (production)");
 } else {
   dotenv.config({ path: ".env.local" });
-  console.log("🧩 Loaded .env.local (development)");
+  console.log("Loaded .env.local (development)");
 }
 
-export const config = {
+// Construct the typed configuration
+export const serverConfig: ServerConfig = {
   env:
     process.env.VERCEL_ENV ||
     process.env.NODE_ENV ||
@@ -38,10 +42,6 @@ export const config = {
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
   },
 
-  nextApp: {
-    url: process.env.NEXT_PUBLIC_APP_URL!,
-  },
-
   stream: {
     videoApiKey: process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY!,
     videoSecretKey: process.env.STREAM_VIDEO_SECRET_KEY!,
@@ -58,11 +58,11 @@ export const config = {
   },
 };
 
-// ✅ Required variables check
-const requiredVars = [
-  ["DATABASE_URL", config.database.url],
-  ["BETTER_AUTH_SECRET", config.betterAuth.secret],
-  ["OPENAI_API_KEY", config.openai.apiKey],
+// Runtime validation
+const requiredVars: [string, string | undefined][] = [
+  ["DATABASE_URL", serverConfig.database.url],
+  ["BETTER_AUTH_SECRET", serverConfig.betterAuth.secret],
+  ["OPENAI_API_KEY", serverConfig.openai.apiKey],
 ];
 
 for (const [key, value] of requiredVars) {
@@ -71,6 +71,6 @@ for (const [key, value] of requiredVars) {
   }
 }
 
-console.log(
-  `✅ Loaded config for ${config.env} environment (DB: ${config.database.name})`
-);
+
+console.log(`✅ Loaded server config for ${serverConfig.env} (DB: ${serverConfig.database.name})`);
+console.log("DATABASE_URL in server.ts:", process.env.DATABASE_URL);

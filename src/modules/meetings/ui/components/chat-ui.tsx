@@ -16,6 +16,7 @@ import { useTRPC } from "@/trpc/client";
 import { LoadingState } from "@/components/loading-state";
 
 import "stream-chat-react/dist/css/v2/index.css";
+import { publicConfig } from "@/config/public";
 
 interface ChatUIProps {
     meetingId: string;
@@ -39,7 +40,7 @@ export const ChatUI = ({
 
     const [channel, setChannel] = useState<StreamChannel>();
     const client = useCreateChatClient({
-        apiKey: process.env.NEXT_PUBLIC_STREAM_CHAT_API_KEY!,
+        apiKey: publicConfig.stream.chatApiKey,
         tokenOrProvider: generateChatToken,
         userData: {
             id: userId,

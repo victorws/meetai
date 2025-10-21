@@ -15,6 +15,7 @@ import { useTRPC } from "@/trpc/client";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { CallUI } from "./call-ui";
+import { publicConfig } from "@/config/public";
 
 interface Props {
     meetingId: string;
@@ -39,7 +40,7 @@ export const CallConnect = ({
     const [client, setClient] = useState<StreamVideoClient>();
     useEffect(() => {
         const _client = new StreamVideoClient({
-            apiKey: process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY!,
+            apiKey: publicConfig.stream.videoApiKey,
             user: {
                 id: userId,
                 name: userName,

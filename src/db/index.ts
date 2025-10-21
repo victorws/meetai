@@ -1,3 +1,10 @@
-import { drizzle } from "drizzle-orm/neon-http";
+import "server-only";
 
-export const db = drizzle(process.env.DATABASE_URL!);
+import { drizzle } from "drizzle-orm/neon-http";
+import { serverConfig } from "@/config";
+
+if (!serverConfig.database.url) {
+  throw new Error("❌ DATABASE_URL is missing from serverConfig");
+}
+
+export const db = drizzle(serverConfig.database.url);
